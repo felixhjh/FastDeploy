@@ -113,8 +113,7 @@ def eval_detection(model,
     for image, i in zip(image_files,
                         trange(
                             image_num,
-                            desc="Inference Progress",
-                            bar_format='{l_bar}{bar:10}{r_bar}{bar:-10b}')):
+                            desc="Inference Progress")):
         im = cv2.imread(image)
         h0, w0 = im.shape[:2]
         h = h0

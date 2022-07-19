@@ -39,7 +39,7 @@ option(ENABLE_OPENCV_CUDA "if to enable opencv with cuda, this will allow proces
 option(ENABLE_DEBUG "if to enable print debug information, this may reduce performance." OFF)
 
 # Whether to build fastdeply with vision/text/... examples, only for testings.
-option(WTIH_VISION_EXAMPLES "Whether to build fastdeply with vision examples" ON)
+option(WITH_VISION_EXAMPLES "Whether to build fastdeply with vision examples" ON)
 
 if(ENABLE_DEBUG)
   add_definitions(-DFASTDEPLOY_DEBUG)
@@ -53,7 +53,7 @@ option(BUILD_FASTDEPLOY_PYTHON "if build python lib for fastdeploy." OFF)
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-if (WTIH_VISION_EXAMPLES AND EXISTS ${PROJECT_SOURCE_DIR}/examples)
+if (WITH_VISION_EXAMPLES AND EXISTS ${PROJECT_SOURCE_DIR}/examples)
   # ENABLE_VISION and ENABLE_VISION_VISUALIZE must be ON if enable vision examples.
   message(STATUS "Found WTIH_VISION_EXAMPLES ON, so, force ENABLE_VISION and ENABLE_VISION_VISUALIZE ON")
   set(ENABLE_VISION ON CACHE BOOL "force to enable vision models usage" FORCE)
@@ -117,11 +117,11 @@ if(ENABLE_TRT_BACKEND)
   list(APPEND DEPEND_LIBS ${TRT_INFER_LIB} ${TRT_ONNX_LIB} ${TRT_CAFFE_LIB} ${TRT_PLUGIN_LIB})
 
   # copy tensorrt libraries to third lib
-  if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/third_libs/install/tensorrt")
-    file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/third_libs/install/tensorrt/lib")
-  endif()
-  file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/third_libs/install/tensorrt/lib")
-  file(COPY ${TRT_INFER_LIB} ${TRT_ONNX_LIB} ${TRT_CAFFE_LIB} ${TRT_PLUGIN_LIB} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/third_libs/install/tensorrt/lib" FOLLOW_SYMLINK_CHAIN)
+#  if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/third_libs/install/tensorrt")
+#    file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/third_libs/install/tensorrt/lib")
+#  endif()
+#  file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/third_libs/install/tensorrt/lib")
+#  file(COPY ${TRT_INFER_LIB} ${TRT_ONNX_LIB} ${TRT_CAFFE_LIB} ${TRT_PLUGIN_LIB} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/third_libs/install/tensorrt/lib" FOLLOW_SYMLINK_CHAIN)
 endif()
 
 if(ENABLE_VISION)
@@ -181,8 +181,8 @@ set_target_properties(fastdeploy PROPERTIES VERSION ${FASTDEPLOY_VERSION})
 target_link_libraries(fastdeploy ${DEPEND_LIBS})
 
 # add examples after prepare include paths for third-parties
-if (WTIH_VISION_EXAMPLES AND EXISTS ${PROJECT_SOURCE_DIR}/examples)
-  add_definitions(-DWTIH_VISION_EXAMPLES)
+if (WITH_VISION_EXAMPLES AND EXISTS ${PROJECT_SOURCE_DIR}/examples)
+  add_definitions(-DWITH_VISION_EXAMPLES)
   set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/examples/bin)
   add_subdirectory(examples)
 endif()
@@ -278,4 +278,5 @@ if(BUILD_FASTDEPLOY_PYTHON)
                                    ${EXTRA_FLAGS})
     target_compile_options(fastdeploy_main PRIVATE $<$<NOT:$<CONFIG:Debug>>:/MT> $<$<CONFIG:Debug>:/MTd>)
   endif()
+
 endif(BUILD_FASTDEPLOY_PYTHON)

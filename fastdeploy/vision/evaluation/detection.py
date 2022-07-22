@@ -175,4 +175,4 @@ def eval_detection(model,
         ap50, ap = ap[:, 0], ap.mean(1)  # AP@0.5, AP@0.5:0.95
         mp, mr, map50, map = round(p.mean(), 3), round(r.mean(), 3), round(
             ap50.mean(), 3), round(ap.mean(), 3)
-    return {"Precision": mp, "Recall": mr, "mAP@.5": map50, "mAP@.5:.95": map}
+        return {"Precision": mp, "Recall": mr, "mAP@.5": map50, "mAP@.5:.95": map}

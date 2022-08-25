@@ -495,3 +495,24 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     license='Apache 2.0')
+rpaths = ["$ORIGIN:$ORIGIN/libs"]
+for root, dirs, files in os.walk(
+        ".setuptools-cmake-build/third_libs/install"):
+    for d in dirs:
+        if d == "lib":
+            path = os.path.relpath(
+                os.path.join(root, d),
+                ".setuptools-cmake-build/third_libs/install")
+            rpaths.append("$ORIGIN/" + os.path.join("libs/third_libs",
+                                                    path))
+rpaths = ":".join(rpaths)
+command = "patchelf --force-rpath --set-rpath '{}' ".format(rpaths) + pybind_so_file
+print(
+    "=========================Set rpath for library===================")
+print(command)
+# The sw_64 not suppot patchelf, so we just disable that.
+if platform.machine() != 'sw_64' and platform.machine() != 'mips64':
+    assert subprocess.Popen(
+        command,
+        shell=True) != 0, "patchelf {} failed, the command: {}".format(
+            command, pybind_so_file)

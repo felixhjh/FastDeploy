@@ -495,6 +495,11 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     license='Apache 2.0')
+
+pybind_so_file = None
+for f in os.listdir(".setuptools-cmake-build"):
+    if f.count(".cpython-") > 0:
+        pybind_so_file = os.path.join(".setuptools-cmake-build", f)
 rpaths = ["$ORIGIN:$ORIGIN/libs"]
 for root, dirs, files in os.walk(
         ".setuptools-cmake-build/third_libs/install"):
